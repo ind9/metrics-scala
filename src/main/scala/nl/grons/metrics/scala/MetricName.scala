@@ -45,7 +45,7 @@ case class MetricName private (dName: DropwizardName) {
 
   def name = dName.getKey
 
-  def tags = dName.getTags
+  def tags = dName.getTags.toMap
 
   def tagWith(tags: (String, String)*) = MetricName(dName.tagged(Map(tags: _*)))
 
