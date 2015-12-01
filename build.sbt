@@ -7,7 +7,7 @@ organization := "nl.grons"
 
 name := "metrics-scala"
 
-lazy val baseVersion = "3.5.2"
+lazy val baseVersion = "3.5.2-Indix"
 
 version <<= akkaVersion { av =>
   val akkaVersion = if (av.nonEmpty) "_a" + av.split('.').take(2).mkString(".") else ""
@@ -71,12 +71,10 @@ scalacOptions ++= Seq("-deprecation", "-unchecked")
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
   if (version.value.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
+    Some("Indix Snapshot Artifactory" at "http://artifacts.indix.tv:8081/artifactory/libs-snapshot-local")
   else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    Some("Indix Release Artifactory" at "http://artifacts.indix.tv:8081/artifactory/libs-release-local")
 }
-
-credentials += Credentials(Path.userHome / ".sbt" / "sonatype.credentials")
 
 publishMavenStyle := true
 
@@ -85,21 +83,3 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
-
-pomExtra := (
-  <url>https://github.com/erikvanoosten/metrics-scala</url>
-  <scm>
-    <url>git@github.com:erikvanoosten/metrics-scala.git</url>
-    <connection>scm:git:git@github.com:erikvanoosten/metrics-scala.git</connection>
-  </scm>
-  <developers>
-    <developer>
-      <name>Erik van Oosten</name>
-      <url>http://day-to-day-stuff.blogspot.com/</url>
-    </developer>
-    <developer>
-      <name>Brian Scully</name>
-      <url>https://github.com/scullxbones/</url>
-    </developer>
-  </developers>
-)
