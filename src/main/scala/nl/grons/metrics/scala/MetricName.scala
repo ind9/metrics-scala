@@ -24,11 +24,14 @@ object MetricName {
     MetricName(new DropwizardName(removeScalaParts(metricOwner.getName)))
 
   // Example weird class name: TestContext$$anonfun$2$$anonfun$apply$TestObject$2$
-  private def removeScalaParts(s: String) =
-    s.replaceAllLiterally("$$anonfun", ".")
-     .replaceAllLiterally("$apply", ".")
-     .replaceAll("""\$\d*""", ".")
-     .replaceAllLiterally(".package.", ".")
+  private def removeScalaParts(s: String) = {
+    val cleaned = s.replaceAllLiterally("$$anonfun", ".")
+      .replaceAllLiterally("$apply", ".")
+      .replaceAll("""\$\d*""", ".")
+      .replaceAllLiterally(".package.", ".")
+
+    cleaned.split('.').mkString(".")
+  }
 
   def apply(name: String): MetricName = MetricName(DropwizardName.build(name))
 
