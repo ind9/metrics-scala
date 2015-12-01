@@ -18,5 +18,5 @@ package nl.grons.metrics.scala
 
 trait BaseBuilder {
   /** The base name for all metrics created from this builder. */
-  lazy val metricBaseName = MetricName(getClass)
+  lazy val metricBaseName = MetricName()
 }

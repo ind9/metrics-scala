@@ -16,8 +16,8 @@
 
 package nl.grons.metrics.scala
 
-import com.codahale.metrics.MetricRegistry
-import com.codahale.metrics.{Gauge => DropwizardGauge, CachedGauge => DropwizardCachedGauge}
+import io.dropwizard.metrics.MetricRegistry
+import io.dropwizard.metrics.{Gauge => DropwizardGauge, CachedGauge => DropwizardCachedGauge}
 import scala.concurrent.duration.FiniteDuration
 
 /**
@@ -29,57 +29,50 @@ class MetricBuilder(val baseName: MetricName, val registry: MetricRegistry) {
    * Registers a new gauge metric.
    *
    * @param name the name of the gauge
-   * @param scope the scope of the gauge or null for no scope
    */
-  def gauge[A](name: String, scope: String = null)(f: => A): Gauge[A] =
-    new Gauge[A](registry.register(metricNameFor(name, scope), new DropwizardGauge[A] { def getValue: A = f }))
+  def gauge[A](name: MetricName)(f: => A): Gauge[A] =
+    new Gauge[A](registry.register(metricNameFor(name).dName, new DropwizardGauge[A] { def getValue: A = f }))
 
   /**
    * Registers a new gauge metric that caches its value for a given duration.
    *
    * @param name the name of the gauge
    * @param timeout the timeout
-   * @param scope the scope of the gauge or null for no scope
    */
-  def cachedGauge[A](name: String, timeout: FiniteDuration, scope: String = null)(f: => A): Gauge[A] =
-    new Gauge[A](registry.register(metricNameFor(name, scope), new DropwizardCachedGauge[A](timeout.length, timeout.unit) { def loadValue: A = f }))
+  def cachedGauge[A](name: MetricName, timeout: FiniteDuration)(f: => A): Gauge[A] =
+    new Gauge[A](registry.register(metricNameFor(name).dName, new DropwizardCachedGauge[A](timeout.length, timeout.unit) { def loadValue: A = f }))
 
   /**
    * Creates a new counter metric.
    *
    * @param name the name of the counter
-   * @param scope the scope of the counter or null for no scope
    */
-  def counter(name: String, scope: String = null): Counter =
-    new Counter(registry.counter(metricNameFor(name, scope)))
+  def counter(name: MetricName): Counter =
+    new Counter(registry.counter(metricNameFor(name).dName))
 
   /**
    * Creates a new histogram metric.
    *
    * @param name the name of the histogram
-   * @param scope the scope of the histogram or null for no scope
    */
-  def histogram(name: String, scope: String = null): Histogram =
-    new Histogram(registry.histogram(metricNameFor(name, scope)))
+  def histogram(name: MetricName): Histogram =
+    new Histogram(registry.histogram(metricNameFor(name).dName))
 
   /**
    * Creates a new meter metric.
    *
    * @param name the name of the meter
-   * @param scope the scope of the meter or null for no scope
    */
-  def meter(name: String, scope: String = null): Meter =
-    new Meter(registry.meter(metricNameFor(name, scope)))
+  def meter(name: MetricName): Meter =
+    new Meter(registry.meter(metricNameFor(name).dName))
 
   /**
    * Creates a new timer metric.
    *
    * @param name the name of the timer
-   * @param scope the scope of the timer or null for no scope
    */
-  def timer(name: String, scope: String = null): Timer =
-    new Timer(registry.timer(metricNameFor(name, scope)))
+  def timer(name: MetricName): Timer =
+    new Timer(registry.timer(metricNameFor(name).dName))
 
-  protected def metricNameFor(name: String, scope: String = null): String =
-    baseName.append(name, scope).name
+  protected def metricNameFor(name: MetricName): MetricName = baseName + name
 }

@@ -40,9 +40,9 @@ class TimerSpec extends FunSpec with OneInstancePerTest {
   import TimerSpec._
 
   describe("A timer") {
-    val metric = mock[com.codahale.metrics.Timer]
+    val metric = mock[io.dropwizard.metrics.Timer]
     val timer = new Timer(metric)
-    val context = mock[com.codahale.metrics.Timer.Context]
+    val context = mock[io.dropwizard.metrics.Timer.Context]
     when(metric.time()).thenReturn(context)
 
     it("times the passed closure") {

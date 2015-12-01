@@ -52,8 +52,8 @@ trait FutureMetrics { self: InstrumentedBuilder =>
    * }
    * }}}
    */
-  def timed[A](metricName: String)(action: => A)(implicit context: ExecutionContext): Future[A] = {
-    val timer = metrics.timer(metricName)
+  def timed[A](metric: MetricName)(action: => A)(implicit context: ExecutionContext): Future[A] = {
+    val timer = metrics.timer(metric)
     Future(timer.time(action))
   }
 
@@ -91,8 +91,8 @@ trait FutureMetrics { self: InstrumentedBuilder =>
    * }
    * }}}
    */
-  def timing[A](metricName: String)(future: => Future[A])(implicit context: ExecutionContext): Future[A] = {
-    val timer = metrics.timer(metricName)
+  def timing[A](metric: MetricName)(future: => Future[A])(implicit context: ExecutionContext): Future[A] = {
+    val timer = metrics.timer(metric)
     val ctx = timer.timerContext
     val f = future
     f.onComplete(_ => ctx.stop())

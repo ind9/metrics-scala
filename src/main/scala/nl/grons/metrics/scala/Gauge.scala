@@ -16,7 +16,7 @@
 
 package nl.grons.metrics.scala
 
-import com.codahale.metrics.{Gauge => DropwizardGauge}
+import io.dropwizard.metrics.{Gauge => DropwizardGauge}
 
 object Gauge {
   def apply[A](f: => A) = new Gauge[A](new DropwizardGauge[A] {

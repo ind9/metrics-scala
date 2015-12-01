@@ -27,7 +27,7 @@ import org.scalatest.OneInstancePerTest
 @RunWith(classOf[JUnitRunner])
 class MeterSpec extends FunSpec with OneInstancePerTest {
   describe("A meter") {
-    val metric = mock[com.codahale.metrics.Meter]
+    val metric = mock[io.dropwizard.metrics.Meter]
     val meter = new Meter(metric)
 
     it("marks the underlying metric") {

@@ -16,8 +16,8 @@
 
 package nl.grons.metrics.scala
 
-import com.codahale.metrics.health.HealthCheck.Result
-import com.codahale.metrics.health.{HealthCheck, HealthCheckRegistry}
+import io.dropwizard.metrics.health.HealthCheck.Result
+import io.dropwizard.metrics.health.{HealthCheck, HealthCheckRegistry}
 import scala.util.{Failure, Success, Try}
 import scala.concurrent.Future
 
@@ -26,12 +26,12 @@ import scala.concurrent.Future
  */
 trait CheckedBuilder extends BaseBuilder {
   /**
-   * The [[com.codahale.metrics.health.HealthCheckRegistry]] where created metrics are registered.
+   * The [[io.dropwizard.metrics.health.HealthCheckRegistry]] where created metrics are registered.
    */
   val registry: HealthCheckRegistry
 
   /**
-   * Converts a code block to a [[com.codahale.metrics.health.HealthCheck]] and registers it.
+   * Converts a code block to a [[io.dropwizard.metrics.health.HealthCheck]] and registers it.
    *
    * Use it as follows:
    * {{{
@@ -49,7 +49,7 @@ trait CheckedBuilder extends BaseBuilder {
    * }}}
    *
    * The code block must have a result of type `Boolean`, `Try`, `Either`, `Future`,
-   * [[com.codahale.metrics.health.HealthCheck.Result]], or simply `Unit`.
+   * [[io.dropwizard.metrics.health.HealthCheck.Result]], or simply `Unit`.
    *
    *  - A check result of `true` indicates healthy, `false` indicates unhealthy.
    *  - A check result of type [[Success]] indicates healthy, [[Failure]] indicates
@@ -58,7 +58,7 @@ trait CheckedBuilder extends BaseBuilder {
    *    result of the execution will be treated as [[Success]] or [[Failure]].
    *  - A check result of type [[Right]] indicates healthy, [[Left]]`[Any]` or [[Left]]`[Throwable]` indicates
    *    unhealthy. The embedded value (after applying `.toString`) or throwable is used as (un)healthy message.
-   *  - If the check result is of type [[com.codahale.metrics.health.HealthCheck.Result]], the result is passed
+   *  - If the check result is of type [[io.dropwizard.metrics.health.HealthCheck.Result]], the result is passed
    *    unchanged.
    *  - A check result of type [[Unit]] indicates healthy.
    *  - If a checker throws an exception, the result is considered unhealthy with the throwable as
@@ -87,7 +87,7 @@ trait CheckedBuilder extends BaseBuilder {
   def healthCheck[T](name: String, unhealthyMessage: String = "Health check failed")(checker: => T)(implicit toMagnet: ByName[T] => HealthCheckMagnet): HealthCheck = {
     val magnet = toMagnet(ByName(checker))
     val check = magnet(unhealthyMessage)
-    registry.register(metricBaseName.append(name).name, check)
+    registry.register(metricBaseName.resolve(name).name, check)
     check
   }
 }
@@ -153,7 +153,7 @@ object HealthCheckMagnet {
   }
 
   /**
-   * Magnet for checkers returning a [[com.codahale.metrics.health.HealthCheck.Result]].
+   * Magnet for checkers returning a [[io.dropwizard.metrics.health.HealthCheck.Result]].
    */
   implicit def fromMetricsResultCheck(checker: ByName[Result]): HealthCheckMagnet = new HealthCheckMagnet {
     def apply(unhealthyMessage: String) = new HealthCheck() {

@@ -16,7 +16,7 @@
 
 package nl.grons.metrics.scala
 
-import com.codahale.metrics.{Meter => DropwizardMeter}
+import io.dropwizard.metrics.{Meter => DropwizardMeter}
 import scala.util.control.ControlThrowable
 
 /**

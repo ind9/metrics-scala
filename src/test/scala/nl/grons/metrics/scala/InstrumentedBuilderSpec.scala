@@ -21,17 +21,18 @@ import org.scalatest.mock.MockitoSugar._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.OneInstancePerTest
-import com.codahale.metrics.MetricRegistry
+import io.dropwizard.metrics.{MetricRegistry, MetricName => DropwizardName}
 import org.mockito.Mockito.verify
+import Implicits.stringToName
 
 @RunWith(classOf[JUnitRunner])
 class InstrumentedBuilderSpec extends FunSpec with OneInstancePerTest {
 
   describe("InstrumentedBuilder") {
-    it("uses owner class as metric base name") {
+    it("uses empty metric base name") {
       val metricOwner = new MetricOwner
       metricOwner.createCounter()
-      verify(metricOwner.metricRegistry).counter("nl.grons.metrics.scala.InstrumentedBuilderSpec.MetricOwner.cnt")
+      verify(metricOwner.metricRegistry).counter(DropwizardName.build("cnt"))
     }
 
     it("supports overriding the metric base name") {
@@ -39,7 +40,7 @@ class InstrumentedBuilderSpec extends FunSpec with OneInstancePerTest {
         override lazy val metricBaseName: MetricName = MetricName("OverriddenBaseName")
       }
       metricOwner.createCounter()
-      verify(metricOwner.metricRegistry).counter("OverriddenBaseName.cnt")
+      verify(metricOwner.metricRegistry).counter(DropwizardName.build("OverriddenBaseName.cnt"))
     }
   }
 

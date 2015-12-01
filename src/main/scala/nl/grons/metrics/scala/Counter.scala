@@ -16,7 +16,7 @@
 
 package nl.grons.metrics.scala
 
-import com.codahale.metrics.{Counter => DropwizardCounter}
+import io.dropwizard.metrics.{Counter => DropwizardCounter}
 
 /**
  * A Scala facade class for [[DropwizardCounter]].

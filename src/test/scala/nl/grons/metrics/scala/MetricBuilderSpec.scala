@@ -21,8 +21,9 @@ import org.junit.runner.RunWith
 import org.scalatest.OneInstancePerTest
 import org.scalatest.FunSpec
 import org.scalatest.junit.JUnitRunner
-import com.codahale.metrics.MetricRegistry
+import io.dropwizard.metrics.MetricRegistry
 import scala.concurrent.duration._
+import Implicits.stringToName
 
 @RunWith(classOf[JUnitRunner])
 class MetricBuilderSpec extends FunSpec with OneInstancePerTest {
@@ -39,7 +40,7 @@ class MetricBuilderSpec extends FunSpec with OneInstancePerTest {
     val cachedGauge: Gauge[Int] = metrics.cachedGauge("cached", 300 milliseconds)(expensiveValue)
     val counter: Counter = metrics.counter("1..2..3..4")
     val histogram: Histogram = metrics.histogram("histo")
-    val meter: Meter = metrics.meter("meter", "testscope")
+    val meter: Meter = metrics.meter("meter")
 
     def waitFor100Ms() {
       timer.time {

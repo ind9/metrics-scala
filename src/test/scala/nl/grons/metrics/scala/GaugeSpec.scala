@@ -27,7 +27,7 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class GaugeSpec extends FunSpec with OneInstancePerTest {
   describe("A gauge") {
-    val metric = mock[com.codahale.metrics.Gauge[Int]]
+    val metric = mock[io.dropwizard.metrics.Gauge[Int]]
     val gauge = new Gauge(metric)
     
     it("invokes underlying function for sugar factory") {

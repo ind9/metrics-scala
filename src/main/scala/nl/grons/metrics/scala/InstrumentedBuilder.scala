@@ -16,7 +16,7 @@
 
 package nl.grons.metrics.scala
 
-import com.codahale.metrics.MetricRegistry
+import io.dropwizard.metrics.MetricRegistry
 
 /**
  * The mixin trait for creating a class which is instrumented with metrics.
@@ -52,13 +52,6 @@ import com.codahale.metrics.MetricRegistry
  * }
  * }}}
  *
- * If you want to use hdrhistograms, you can override the metric builder as follows:
- * {{{
- * trait Instrumented extends InstrumentedBuilder {
- *   override lazy protected val metricBuilder = new HdrMetricBuilder(metricBaseName, metricRegistry, false)
- *   val metricRegistry = Application.metricRegistry
- * }
- * }}}
  *
  * See the [[https://github.com/erikvanoosten/metrics-scala/blob/master/docs/Hdrhistogram.md the manual]]
  * for more instructions on using hdrhistogram.

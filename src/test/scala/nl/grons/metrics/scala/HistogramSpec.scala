@@ -27,7 +27,7 @@ import org.scalatest.OneInstancePerTest
 @RunWith(classOf[JUnitRunner])
 class HistogramSpec extends FunSpec with OneInstancePerTest {
   describe("A histogram") {
-    val metric = mock[com.codahale.metrics.Histogram]
+    val metric = mock[io.dropwizard.metrics.Histogram]
     val histogram = new Histogram(metric)
 
     it("updates the underlying histogram with an int") {
@@ -43,7 +43,7 @@ class HistogramSpec extends FunSpec with OneInstancePerTest {
     }
 
     it("retrieves a snapshot for statistics") {
-      val snapshot = mock[com.codahale.metrics.Snapshot]
+      val snapshot = mock[io.dropwizard.metrics.Snapshot]
       when(snapshot.getMax).thenReturn(1L)
       when(metric.getSnapshot).thenReturn(snapshot)
 

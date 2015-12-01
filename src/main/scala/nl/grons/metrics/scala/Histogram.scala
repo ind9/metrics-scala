@@ -16,7 +16,7 @@
 
 package nl.grons.metrics.scala
 
-import com.codahale.metrics.{Histogram => DropwizardHistogram, Snapshot}
+import io.dropwizard.metrics.{Histogram => DropwizardHistogram, Snapshot}
 
 /**
  * A Scala facade class for [[DropwizardHistogram]].

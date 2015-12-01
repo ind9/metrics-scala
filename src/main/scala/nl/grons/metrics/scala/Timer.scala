@@ -16,7 +16,7 @@
 
 package nl.grons.metrics.scala
 
-import com.codahale.metrics.{Snapshot, Timer => DropwizardTimer}
+import io.dropwizard.metrics.{Snapshot, Timer => DropwizardTimer}
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 
@@ -96,7 +96,7 @@ class Timer(private[scala] val metric: DropwizardTimer) {
   }
 
   /**
-   * A timing [[com.codahale.metrics.Timer.Context]],
+   * A timing [[io.dropwizard.metrics.Timer.Context]],
    * which measures an elapsed time in nanoseconds.
    */
   def timerContext(): DropwizardTimer.Context = metric.time()

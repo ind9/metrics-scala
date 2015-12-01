@@ -16,8 +16,8 @@
 
 package nl.grons.metrics.scala
 
-import com.codahale.metrics.health.HealthCheck.Result
-import com.codahale.metrics.health.{HealthCheck, HealthCheckRegistry}
+import io.dropwizard.metrics.health.HealthCheck.Result
+import io.dropwizard.metrics.health.{HealthCheck, HealthCheckRegistry}
 import org.junit.runner.RunWith
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.FunSpec
@@ -36,7 +36,7 @@ class HealthCheckSpec extends FunSpec {
     it ("registers the created checker") {
       val checkOwner = newCheckOwner
       val check = checkOwner.createBooleanHealthCheck { true }
-      verify(checkOwner.registry).register("nl.grons.metrics.scala.CheckOwner.test", check)
+      verify(checkOwner.registry).register("test", check)
     }
 
     it("build health checks that call the provided checker") {

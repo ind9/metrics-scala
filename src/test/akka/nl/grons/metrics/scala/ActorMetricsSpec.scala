@@ -25,7 +25,9 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import akka.actor.Actor
 import akka.actor.ActorSystem
-import com.codahale.metrics.Timer.Context
+import io.dropwizard.metrics.Timer.Context
+import Implicits.stringToName
+import io.dropwizard.metrics.{MetricName => Dname}
 
 object TestFixture {
 
@@ -50,12 +52,12 @@ object TestFixture {
 
     val metricRegistry = null
 
-    var counterName: String = null
+    var counterName: MetricName = null
 
     val mockBuilder = new MetricBuilder(null,null) {
-      override def counter(name: String, scope: String = null) = { counterName = name; fixture.mockCounter }
-      override def timer(name: String, scope: String = null) = fixture.mockTimer
-      override def meter(name: String, scope: String = null) = fixture.mockMeter
+      override def counter(name: MetricName) = { counterName = name; fixture.mockCounter }
+      override def timer(name: MetricName) = fixture.mockTimer
+      override def meter(name: MetricName) = fixture.mockMeter
     }
     override def metrics = mockBuilder
   }
@@ -101,7 +103,7 @@ class ActorMetricsSpec extends FunSpec {
       ref.underlyingActor.receive should not be (null)
       ref ! "test"
       verify(fixture.mockCounter).count(any[PartialFunction[Any,Unit]])
-      ref.underlyingActor.counterName should equal ("receiveCounter")
+      ref.underlyingActor.counterName should equal (MetricName("receiveCounter"))
     }
   }
 
@@ -131,7 +133,7 @@ class ActorMetricsSpec extends FunSpec {
       verify(fixture.mockCounter).count(any[PartialFunction[Any,Unit]])
       verify(fixture.mockTimer).timePF(any[PartialFunction[Any,Unit]])
       verify(fixture.mockMeter, never()).mark()
-      ref.underlyingActor.counterName should equal ("nl.grons.metrics.scala.TestFixture.ComposedActor.receiveCounter")
+      ref.underlyingActor.counterName should equal (MetricName("nl.grons.metrics.scala.TestFixture.ComposedActor.receiveCounter"))
     }
   }
 

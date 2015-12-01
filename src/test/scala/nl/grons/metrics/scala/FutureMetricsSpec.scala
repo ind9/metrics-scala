@@ -25,16 +25,17 @@ import scala.concurrent.ExecutionContext
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import scala.concurrent.Await
-import com.codahale.metrics.Timer.Context
+import io.dropwizard.metrics.Timer.Context
 import scala.concurrent.Promise
 import scala.concurrent.duration._
+import Implicits.stringToName
 
 @RunWith(classOf[JUnitRunner])
 class FutureMetricsSpec extends FunSpec with OneInstancePerTest with FutureMetrics with InstrumentedBuilder {
 
   val metricRegistry = null
   override def metrics = new MetricBuilder(null,null) {
-    override def timer(name: String, scope: String = null): Timer = mockTimer
+    override def timer(name: MetricName): Timer = mockTimer
   }
 
   var timeCalled = false

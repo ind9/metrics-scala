@@ -27,7 +27,7 @@ import org.scalatest.OneInstancePerTest
 @RunWith(classOf[JUnitRunner])
 class CounterSpec extends FunSpec with OneInstancePerTest {
   describe("A counter") {
-    val metric = mock[com.codahale.metrics.Counter]
+    val metric = mock[io.dropwizard.metrics.Counter]
     val counter = new Counter(metric)
 
     it("+= should increment the underlying metric by an arbitrary amount") {
